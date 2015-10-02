@@ -7,8 +7,11 @@ using System.Web.Mvc;
 using ParkingSpace.Services;
 using ParkingSpace.Models;
 namespace ParkingSpace.Web.Controllers {
+
+  [RoutePrefix("gate-in")]
   public class GateInController : Controller {
     // GET: GateIn
+    [Route]
     public ActionResult Index() {
       return View();
     }
