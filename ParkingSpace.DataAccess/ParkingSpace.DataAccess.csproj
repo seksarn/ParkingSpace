@@ -49,6 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context\ParkingSpaceDb.cs" />
+    <Compile Include="Core\FakeRepository_T.cs" />
+    <Compile Include="Core\IRepository.cs" />
+    <Compile Include="Core\IRepository_Tree.cs" />
+    <Compile Include="Core\ReppositoryBase.cs" />
     <Compile Include="ParkingTicketRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using ParkingSpace.Web.Controllers;
+﻿using ParkingSpace.Web.Controllers;
 using Xunit;
 using System.Web.Mvc;
 using ParkingSpace.Web.Printing;
 using ParkingSpace.Models;
+using System.Data.Entity;
+using ParkingSpace.Services;
 
 namespace ParkingSpace.Facts.Controller {
- public class GateInControllerFacts {
+  public class GateInControllerFacts {
 
     public class IndexAction {
       [Fact]
@@ -25,7 +21,7 @@ namespace ParkingSpace.Facts.Controller {
     }
 
     public class CreateTicketAction {
-      class FackPrinter : IParkingTicketPrinter {
+      class FakePrinter : IParkingTicketPrinter {
         public bool HasPrinted = false;
 
         public void Print(ParkingTicket ticket, object args = null) {
@@ -36,12 +32,16 @@ namespace ParkingSpace.Facts.Controller {
 
       [Fact]
       public void ShouldCreatePDFFile() {
-        var printer = new FackPrinter();
-        var ctrl = new GateInController(printer);
-        var result = ctrl.CreateTicket("1234");
+        using (var app = new App(testing: true)) {
+          var printer = new FakePrinter();
+          var ctrl = new GateInController(printer, app);
+          var result = ctrl.CreateTicket("1234");
 
-        Assert.Equal(true, printer.HasPrinted);
+          Assert.Equal(true, printer.HasPrinted);
+        }
+
       }
+
     }
 
   }

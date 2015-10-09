@@ -10,21 +10,21 @@ using Xunit;
 using Xunit.Abstractions;
 
 namespace ParkingSpace.Facts.Services {
- public class ParkingTicketServiceFacts {
-   
+  public class ParkingTicketServiceFacts {
+
     public class GeneralUsage {
-      
+
       [Fact]
       public void HasDefaultValues() {
         var s = new ParkingTicketService();
         Assert.Equal(0, s.GateID);
-        Assert.Equal(1, s.NextID);
+        // Assert.Equal(1, s.NextID);
       }
 
-     
+
     }
-    
-        
+
+
     public class CreateParkingTicketMethod {
 
 
@@ -36,62 +36,66 @@ namespace ParkingSpace.Facts.Services {
 
       [Fact]
       public void ReturnParingTicket() {
-        var s = new ParkingTicketService();
+        using (var app = new App(testing: true)) {
+          var s = app.ParkingTickets;
 
-        var t = s.CreateParkingTicket("1122");
+          var t = s.CreateParkingTicket("1122");
 
-        Assert.NotNull(t);
-        Assert.Equal("1122", t.PlateNo);
+          Assert.NotNull(t);
+          Assert.Equal("1122", t.PlateNo);
+        }
       }
 
       [Fact]
       public void NewTicket_hasNoDateOut() {
-        var s = new ParkingTicketService();
+        using (var app = new App(testing: true)) {
+          var s = app.ParkingTickets;
 
-        var t = s.CreateParkingTicket("1122");
+          var t = s.CreateParkingTicket("1122");
 
-        var dt = DateTime.Now;
-        SystemTime.SetNow(dt);
+          var dt = DateTime.Now;
+          SystemTime.SetNow(dt);
 
-        Assert.NotEqual(default(DateTime), t.DateIn);
-        Assert.Equal(dt, t.DateIn);
-        Assert.Null(t.DateOut);
+          Assert.NotEqual(default(DateTime), t.DateIn);
+          Assert.Equal(dt, t.DateIn);
+          Assert.Null(t.DateOut);
+        }
       }
 
       [Fact]
       public void NewTicket_hasAutoRunningId() {
-        var s = new ParkingTicketService();
+        using (var app = new App(testing: true)) {
+          var s = app.ParkingTickets;
 
-        int nextId1 = s.NextID;
-        int gateId = s.GateID;
+          var ticket1 = s.CreateParkingTicket("23");
+          var ticketId1 = string.Format("00-{0:00000}", 1);
 
-        var t = s.CreateParkingTicket("23");
-        var id1 = $"{gateId:00}-{nextId1:00000}";
+          displayTicket(ticket1);
 
+          Assert.Equal(ticketId1, ticket1.ID);
 
-        displayTicket(t);
-        Assert.Equal(id1, t.ID);
+          var ticket2 = s.CreateParkingTicket("555");
+          var ticketId2 = string.Format("00-{0:00000}", 2);
 
-         //////////////////////////////////////////////
-        int nextId2 = s.NextID;
-        var t2 = s.CreateParkingTicket("555");
-        var id2 = $"{gateId:00}-{nextId2:00000}";
+          displayTicket(ticket2);
 
-        displayTicket(t2);
+          Assert.Equal(ticketId2, ticket2.ID);
 
-        Assert.Equal(nextId1 + 1, nextId2);
-        Assert.Equal(id2, t2.ID);
+        }
+
       }
 
       [Fact]
       public void NewTicket_UseGateIdFromService() {
-        var s = new ParkingTicketService();
+        using (var app = new App(testing: true)) {
+          var s = app.ParkingTickets;
 
-        var t = s.CreateParkingTicket("23");
+          var t = s.CreateParkingTicket("23");
 
-        Assert.Equal(s.GateID, t.GateID);
+          Assert.Equal(s.GateID, t.GateID);
+        }
       }
-    
+
       private void displayTicket(ParkingTicket t) {
         output.WriteLine("TICKET");
 
@@ -101,9 +105,18 @@ namespace ParkingSpace.Facts.Services {
         output.WriteLine($"Date In: {t.DateIn}");
       }
 
+      [Fact]
+      public void NewTicketHas_InsertedToDatabase() {
+        using (var app = new App(testing: true)) {
+          var t = app.ParkingTickets.CreateParkingTicket("3AC-1111");
+          var count = app.ParkingTickets.All().Count();
 
+          Assert.Equal(1, count);
 
-    
+          var firstTicket = app.ParkingTickets.All().FirstOrDefault();
+          Assert.Equal("3AC-1111", firstTicket.PlateNo);
+        }
+      }
 
     }
   }

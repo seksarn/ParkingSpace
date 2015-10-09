@@ -22,10 +22,8 @@ namespace ParkingSpace.Web.Printing {
       r.PageSize = Rotativa.Options.Size.A6;
       r.PageOrientation = Rotativa.Options.Orientation.Portrait;
 
-
       var fName = ticket.ID + ".PDF";
       var fPath = HttpContext.Current. Server.MapPath("~/App_Data/" + fName);
-
 
       var bytes = r.BuildPdf((ControllerContext) args);
       System.IO.File.WriteAllBytes(fPath, bytes);

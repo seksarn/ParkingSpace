@@ -2,7 +2,7 @@
 @model ParkingTicket
 
 
-<h3>@Model.ID</h3>
-<h3>@Model.PlateNo</h3>
-<h3>@Model.DateIn</h3>
+<h2>Parking ID: @Model.ID</h2>
+<h3>Plate No: @Model.PlateNo</h3>
+<h3>Date In: @Model.DateIn.ToString("dd/MM/yyyy HH:mm TT")</h3>
 
