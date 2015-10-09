@@ -4,7 +4,7 @@
   var t = (ParkingTicket)TempData["NewTicket"];
 }
 
-<h2>Gate In</h2>
+<h2>Gate In [@ViewBag.GateID]</h2>
 
 @using (Html.BeginForm("CreateTicket", "GateIn")) {
   <div>
