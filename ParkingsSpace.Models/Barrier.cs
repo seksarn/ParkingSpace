@@ -14,6 +14,6 @@ namespace ParkingSpace.Models {
     /// <summary>
     /// Status of barrier
     /// </summary>
-    public BarrierStatus  Status { get; private set; }
+    public BarrierStatus Status { get; private set; }
   }
 }

@@ -7,5 +7,9 @@ namespace ParkingSpace.DataAccess.Context {
     /// </summary>
     public DbSet<ParkingTicket> parkingTicket { get; set; }
 
+    /// <summary>
+    /// Table far save Setting's data
+    /// </summary>
+    public DbSet<Setting> Setting { get; set; }
   }
 }

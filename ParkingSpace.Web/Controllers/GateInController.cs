@@ -24,6 +24,7 @@ namespace ParkingSpace.Web.Controllers {
     // GET: GateIn
     [Route]
     public ActionResult Index() {
+      ViewBag.GateID = app.Setting.Current.GateID;
       return View();
     }
 

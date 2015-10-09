@@ -19,10 +19,15 @@ namespace ParkingSpace.Services {
 
     protected override void RegisterServices() {
       this.AddService<ParkingTicket, ParkingTicketService, ParkingTicketRepository>();
+      this.AddService<Setting, SettingService, SettingRepository>();
+
     }
+
 
     protected override void RegisterServicesForUnitTests() {
       this.AddService<ParkingTicket, ParkingTicketService,  FakeRepository<ParkingTicket>>();
+      this.AddService<Setting, SettingService, FakeRepository<Setting>>();
+
     }
 
     public ParkingTicketService ParkingTickets {
@@ -30,6 +35,14 @@ namespace ParkingSpace.Services {
         return this.Services<ParkingTicket, ParkingTicketService>();
       }
     }
+
+    public SettingService Setting {
+      get {
+        return this.Services<Setting, SettingService>();
+      }
+    }
+
+
 
 
 
