@@ -1,22 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
-using ParkingSpace.Services;
 using ParkingSpace.Models;
+using ParkingSpace.Services;
+using System;
+using ParkingSpace.Web.Printing;
+using Rotativa;
+
 namespace ParkingSpace.Web.Controllers {
 
   [RoutePrefix("gate-in")]
   public class GateInController : Controller {
-    private ParkingTicketService service;
+    private static ParkingTicketService service;
 
-
-    public GateInController() {
+    static GateInController() {
       service = new ParkingTicketService();
     }
-    
+
+    private readonly IParkingTicketPrinter printer;
+
+    public GateInController()  {
+      // this.printer = new PDFParkingTicketPrinter(this.ControllerContext);
+      this.printer = new PDFParkingTicketPrinter();
+    }
+    public GateInController(IParkingTicketPrinter printer) {
+      this.printer = printer;
+    }
+
     // GET: GateIn
     [Route]
     public ActionResult Index() {
@@ -27,9 +38,12 @@ namespace ParkingSpace.Web.Controllers {
     [Route("CreateTicket")]
     public ActionResult CreateTicket(string plateno) {
       var ticket = service.CreateParkingTicket(plateno);
-      printParkingTicket(ticket);
+    
+      this.printer.Print(ticket, this.ControllerContext);
+
       TempData["NewTicket"] = ticket;
 
+      
       return RedirectToAction("Index");
     }
 
@@ -38,7 +52,9 @@ namespace ParkingSpace.Web.Controllers {
     }
 
     private void printParkingTicket(ParkingTicket t) {
-
+      
     }
+
+   
   }
 }

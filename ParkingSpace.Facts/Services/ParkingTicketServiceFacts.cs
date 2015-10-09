@@ -91,8 +91,7 @@ namespace ParkingSpace.Facts.Services {
 
         Assert.Equal(s.GateID, t.GateID);
       }
-
-
+    
       private void displayTicket(ParkingTicket t) {
         output.WriteLine("TICKET");
 
@@ -102,6 +101,9 @@ namespace ParkingSpace.Facts.Services {
         output.WriteLine($"Date In: {t.DateIn}");
       }
 
+
+
+    
 
     }
   }
